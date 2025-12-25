@@ -31,11 +31,11 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 
     // Buscar itens para cada lista
     const history = await Promise.all(
-      lists.map(async (list) => {
+      lists.map(async (list: any) => {
         const items = await ShoppingItem.find({ lista_id: list._id }).lean();
         return {
           ...list,
-          items: items.map((item) => ({
+          items: items.map((item: any) => ({
             id: item._id.toString(),
             nome_produto: item.nome_produto,
             quantidade: item.quantidade,
@@ -83,7 +83,7 @@ router.get('/analytics/monthly', authenticateToken, async (req: AuthRequest, res
       };
     } = {};
 
-    lists.forEach((list) => {
+    lists.forEach((list: any) => {
       if (!list.data_finalizacao) return;
 
       const date = new Date(list.data_finalizacao);
@@ -155,7 +155,7 @@ router.get('/analytics/top-products', authenticateToken, async (req: AuthRequest
       [key: string]: { name: string; totalQuantity: number; timesPurchased: number };
     } = {};
 
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       const key = item.nome_produto.toLowerCase().trim();
       if (!productMap[key]) {
         productMap[key] = {
@@ -196,7 +196,7 @@ router.get('/analytics/stats', authenticateToken, async (req: AuthRequest, res: 
     }).lean();
 
     const totalPurchases = lists.length;
-    const totalSpent = lists.reduce((sum, list) => sum + (list.valor_total || 0), 0);
+    const totalSpent = lists.reduce((sum: number, list: any) => sum + (list.valor_total || 0), 0);
     const averageTicket = totalPurchases > 0 ? totalSpent / totalPurchases : 0;
 
     // Estatísticas do mês atual
@@ -205,11 +205,11 @@ router.get('/analytics/stats', authenticateToken, async (req: AuthRequest, res: 
     currentMonthStart.setHours(0, 0, 0, 0);
 
     const currentMonthLists = lists.filter(
-      (list) => list.data_finalizacao && new Date(list.data_finalizacao) >= currentMonthStart
+      (list: any) => list.data_finalizacao && new Date(list.data_finalizacao) >= currentMonthStart
     );
 
     const currentMonthSpent = currentMonthLists.reduce(
-      (sum, list) => sum + (list.valor_total || 0),
+      (sum: number, list: any) => sum + (list.valor_total || 0),
       0
     );
     const currentMonthPurchases = currentMonthLists.length;

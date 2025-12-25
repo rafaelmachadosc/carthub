@@ -29,7 +29,7 @@ const formatListResponse = async (list: any) => {
   const items = await ShoppingItem.find({ lista_id: list._id });
   return {
     ...list.toObject(),
-    items: items.map((item) => ({
+    items: items.map((item: any) => ({
       id: item._id.toString(),
       nome_produto: item.nome_produto,
       quantidade: item.quantidade,

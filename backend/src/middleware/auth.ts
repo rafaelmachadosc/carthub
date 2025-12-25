@@ -6,6 +6,9 @@ export interface AuthRequest extends Request {
     email: string;
     nome: string;
   };
+  query: Request['query'];
+  body: Request['body'];
+  params: Request['params'];
 }
 
 export const authenticateToken = (
@@ -33,7 +36,11 @@ export const authenticateToken = (
       return;
     }
 
-    req.user = decoded as { email: string; name: string };
+    const decodedUser = decoded as { email: string; nome?: string; name?: string };
+    req.user = {
+      email: decodedUser.email,
+      nome: decodedUser.nome || decodedUser.name || '',
+    };
     next();
   });
 };
