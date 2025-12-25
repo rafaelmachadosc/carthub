@@ -13,6 +13,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 
     let query: any = {
       usuario_email: userEmail,
+      tipo: 'ativa',
       status: 'finalizada',
     };
 
@@ -65,6 +66,7 @@ router.get('/analytics/monthly', authenticateToken, async (req: AuthRequest, res
 
     const lists = await ShoppingList.find({
       usuario_email: userEmail,
+      tipo: 'ativa',
       status: 'finalizada',
       data_finalizacao: { $gte: startDate, $lte: endDate },
     }).lean();
@@ -135,6 +137,7 @@ router.get('/analytics/top-products', authenticateToken, async (req: AuthRequest
 
     const lists = await ShoppingList.find({
       usuario_email: userEmail,
+      tipo: 'ativa',
       status: 'finalizada',
       data_finalizacao: { $gte: startDate },
     }).select('_id').lean();
@@ -187,6 +190,7 @@ router.get('/analytics/stats', authenticateToken, async (req: AuthRequest, res: 
 
     const lists = await ShoppingList.find({
       usuario_email: userEmail,
+      tipo: 'ativa',
       status: 'finalizada',
       data_finalizacao: { $gte: startDate },
     }).lean();
@@ -213,6 +217,7 @@ router.get('/analytics/stats', authenticateToken, async (req: AuthRequest, res: 
     // Lista ativa
     const activeList = await ShoppingList.findOne({
       usuario_email: userEmail,
+      tipo: 'ativa',
       status: 'ativa',
     });
     const activeItemsCount = activeList

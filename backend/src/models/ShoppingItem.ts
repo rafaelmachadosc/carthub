@@ -6,6 +6,7 @@ export interface IShoppingItem extends Document {
   quantidade: number;
   valor_unitario?: number;
   comprado: boolean;
+  incluido?: boolean; // Para lista de planejamento - marca se foi incluído na lista ativa
 }
 
 const ShoppingItemSchema: Schema = new Schema(
@@ -14,7 +15,6 @@ const ShoppingItemSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'ShoppingList',
       required: true,
-      index: true,
     },
     nome_produto: {
       type: String,
@@ -34,9 +34,14 @@ const ShoppingItemSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
+    incluido: {
+      type: Boolean,
+      default: false,
+    },
   }
 );
 
+// Criar índice apenas uma vez
 ShoppingItemSchema.index({ lista_id: 1 });
 
 export default mongoose.model<IShoppingItem>('ShoppingItem', ShoppingItemSchema);

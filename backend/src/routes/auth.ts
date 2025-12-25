@@ -4,10 +4,17 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
 const router = express.Router();
-const client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET
-);
+
+const getOAuthClient = () => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  
+  if (!clientId || !clientSecret) {
+    throw new Error('GOOGLE_CLIENT_ID ou GOOGLE_CLIENT_SECRET não configurados');
+  }
+  
+  return new OAuth2Client(clientId, clientSecret);
+};
 
 router.post('/google', async (req: Request, res: Response) => {
   try {
@@ -18,9 +25,16 @@ router.post('/google', async (req: Request, res: Response) => {
       return;
     }
 
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      res.status(500).json({ error: 'GOOGLE_CLIENT_ID não configurado no servidor' });
+      return;
+    }
+
+    const client = getOAuthClient();
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: clientId,
     });
 
     const payload = ticket.getPayload();
@@ -67,9 +81,14 @@ router.post('/google', async (req: Request, res: Response) => {
         picture: user.foto_perfil,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro na autenticação:', error);
-    res.status(500).json({ error: 'Erro ao autenticar usuário' });
+    console.error('Erro detalhado:', error.message);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Erro ao autenticar usuário',
+      details: error.message 
+    });
   }
 });
 

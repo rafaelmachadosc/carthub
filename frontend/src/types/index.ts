@@ -10,11 +10,13 @@ export interface ShoppingItem {
   quantidade: number;
   valor_unitario?: number;
   comprado: boolean;
+  incluido?: boolean; // Para lista de planejamento - marca se foi incluído na lista ativa
 }
 
 export interface ShoppingList {
   _id?: string;
   usuario_email: string;
+  tipo: 'planejamento' | 'ativa';
   status: 'ativa' | 'finalizada';
   data_criacao?: string;
   data_finalizacao?: string;

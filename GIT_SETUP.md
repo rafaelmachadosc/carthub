@@ -5,7 +5,7 @@
 Primeiro, configure seu nome e email (substitua pelos seus dados reais):
 
 ```bash
-git config --global user.name "rafaelmachadosc"
+git config --global user.name "rafaelmacha"
 git config --global user.email "sabrinefachini.adm@gmail.com"
 ```
 

@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IShoppingList extends Document {
   usuario_email: string;
+  tipo: 'planejamento' | 'ativa';
   status: 'ativa' | 'finalizada';
   data_criacao: Date;
   data_finalizacao?: Date;
@@ -15,6 +16,13 @@ const ShoppingListSchema: Schema = new Schema(
       required: true,
       lowercase: true,
       trim: true,
+      index: true,
+    },
+    tipo: {
+      type: String,
+      enum: ['planejamento', 'ativa'],
+      required: true,
+      default: 'ativa',
       index: true,
     },
     status: {
@@ -38,7 +46,7 @@ const ShoppingListSchema: Schema = new Schema(
   }
 );
 
-ShoppingListSchema.index({ usuario_email: 1, status: 1 });
+ShoppingListSchema.index({ usuario_email: 1, tipo: 1, status: 1 });
 ShoppingListSchema.index({ usuario_email: 1, data_finalizacao: -1 });
 
 export default mongoose.model<IShoppingList>('ShoppingList', ShoppingListSchema);
