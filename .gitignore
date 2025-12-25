@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# MongoDB
+*.db
+*.db-shm
+*.db-wal
+
+# TypeScript
+*.tsbuildinfo
+
+# Frontend specific
+.vite/
+coverage/
+
+# Backend specific
+*.pid
+*.seed
+*.pid.lock
+
